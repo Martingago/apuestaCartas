@@ -1,16 +1,19 @@
 package main.sieteymedio;
 
 import juegos.sieteymedia.GameController;
+import juegos.sieteymedia.Hooks;
 
 public class Sieteymedio {
 
     public static void main(String[] args) {
         //se inicia un game controller y se establecen los datos del usuario
         GameController controlador = new GameController();
+        Hooks herramientas = new Hooks();
         controlador.inicioPartida();
+        
         //Solicita al jugador que realice su apuesta
         int credito = controlador.getJugador().getCredito();
-        
+        herramientas.menuPrincipalAplicacion(controlador.getJugador());
         while(credito >10){
         controlador.comenzarApuesta();
         
@@ -46,6 +49,7 @@ public class Sieteymedio {
         } else {
             //El jugador pierde automaticamente
             System.out.println("Has perdido!");
+            controlador.getMaquina().setPuntaje(0);
             controlador.mostrarPuntuacion();
         }
         credito = controlador.getJugador().getCredito();

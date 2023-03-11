@@ -1,58 +1,53 @@
 package juegos.sieteymedia;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.Scanner;
 import juegos.recursos.*;
 
 public class GameController {
 
     Scanner sc = new Scanner(System.in);
-    String nombre;
     Baraja baraja = new Baraja();
     Hooks hooks = new Hooks();
     Jugador jugador;
     Jugador maquina;
 
     /**
-     * Método para solicitar nombre usuarios
-     *
-     * @return nombre del usuario
-     */
-    public String solicitarNombre() {
-        System.out.println("Cómo te llamas?");
-        this.nombre = sc.nextLine();
-        return nombre;
-    }
-
-    /**
      * Método que inicia automaticamente los datos principales de una partida:
      * Solicita nombre al usuario y establece su crédito: por defecto 1000
-     * Genera una baraja de cartas y posteriormente la ordena de forma aleatoria
+     * Genera una baraja de cartas y posteriormente la des-ordena de forma aleatoria
      */
     public void inicioPartida() {
-        solicitarNombre();
+        String nombre = hooks.solicitarNombre();
         jugador = new Jugador(nombre);
         maquina = new Jugador("Máquina", 99999);
         hooks.outputTextoInicioPartida(jugador.getNombre(), jugador.getCredito());
-        baraja.generarBaraja();
-        baraja.barajaCartas();
+        baraja.generarBaraja(); //genera una baraja
+        baraja.barajaCartas(); //desordena la baraja
     }
 
     /**
-     * Permite al usuario iniciar una apuesta
-     *
+     * INICIA LA APUESTA DE UN USUARIO. 
+     * Permite al jugador realizar una apuesta.
+     * Si el jugador tiene al menos 10 créditos, se le solicita la cantidad de
+     * créditos que desea apostar. La apuesta se acumula en el objeto Jugador > apuesta.
+     * Si el jugador no tiene suficientes créditos o apuesta menos de 10, se
+     * muestra un mensaje de error.
+     * En caso de que entre 2 turnos se quede sin saldo mínimo para continuar la apuesta 
+     * el juego seguirá pero sin pedir creditos al usuario.
      */
     public void comenzarApuesta() {
         System.out.println("Ingresa la cantidad de creditos que quieres apostar: ");
-        int credito = jugador.getCredito();
+        int credito = jugador.getCredito(); //obtenemos el credito del usuario
         int apuestaTiradaCarta; //Establece la apuesta de la tirada del jugador
         int apuestaTotal; //Apuesta total (acumulada) del jugador en todas las tiradas
+        
         //Si el jugador tiene mas de 10 creditos se le permite apostar
         if (jugador.getCredito() >= 10) {
             do {
                 //Se le pide apuesta al usuario
-                apuestaTiradaCarta = sc.nextInt();
+                apuestaTiradaCarta = hooks.verificarInputNumerico();
                 apuestaTotal = jugador.getApuesta() + apuestaTiradaCarta;
                 if (apuestaTiradaCarta < 10) {
                     System.out.println("Error, cantidad mínima 10 créditos,  vuelve a introducir un valor válido");
@@ -148,7 +143,8 @@ public class GameController {
 
     /**
      * Pregunta al jugador si quiere continuar pidiendo cartas
-     * @return 
+     *
+     * @return
      */
     public boolean preguntarJugadorContinuaPidiendoCartas() {
         System.out.println("¿Pides una [C]arta, o te [P]lantas?");
@@ -206,15 +202,14 @@ public class GameController {
         jugador.setCredito(credito);
         System.out.println("Tu nuevo credito es de: " + jugador.getCredito());
     }
-    
-    public void ContinuarSiguienteRondaJuego(){
-    //Reinicia la mano de la maquina y del jugador:
-    jugador.BorrarMano();
-    maquina.BorrarMano();
-    //Pone la apuesta del jugador en 0
-   jugador.setApuesta(0);
-        
-    
+
+    public void ContinuarSiguienteRondaJuego() {
+        //Reinicia la mano de la maquina y del jugador:
+        jugador.BorrarMano();
+        maquina.BorrarMano();
+        //Pone la apuesta del jugador en 0
+        jugador.setApuesta(0);
+
     }
 
     public Baraja getBaraja() {
@@ -241,6 +236,4 @@ public class GameController {
         this.maquina = maquina;
     }
 
-    
-    
 }

@@ -13,6 +13,8 @@ public class Baraja {
     private ArrayList<Carta> arrCartasRetiradasMonton = new ArrayList<>(); //Arr con las cartas que se han retirado
     private ArrayList<Carta> arrCartasRestantesMonton; //Arr con las cartas que quedan en el monton
     private ArrayList<Carta> manoDeCartas;
+    
+    
     /**
      * @return baraja ordenada Recorre el bucle que contiene el array de
      * 'numeros' anidado en otro bucle que contiene el array de 'palos' por cada
@@ -79,7 +81,6 @@ public class Baraja {
 
     /**
      * Imprime las cartas de un arrayList
-     *
      * @param cartas arrayList que en su interior tiene objetos de tipo cartas
      */
     public void imprimirCartas(ArrayList<Carta> cartas) {
@@ -97,7 +98,6 @@ public class Baraja {
 
     /**
      * funcion para ver cartas retiradas
-     *
      * @return arrayList de las cartas que ya han sido dadas a los jugadores
      */
     public ArrayList<Carta> cartasDadas() {
